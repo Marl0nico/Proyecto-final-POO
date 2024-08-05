@@ -1,5 +1,10 @@
 package Lideres;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 import javax.swing.*;
+import javax.swing.text.Document;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 public class AsignacionTareas_Lider {
@@ -22,6 +27,73 @@ public class AsignacionTareas_Lider {
     private JButton VolverPanel_Lider;
     private JButton VaciarCampos;
     public JPanel PanelAgregar_Tarea;
+    private JTextField IngresoProgramador;
+    private JLabel Programador;
+    private MongoCollection<Document> collection;
+    private int TareasID=1;
+    String titulo, categoria, descripcion, fechaInicio, fechaFin, prioridad, estado, programador;
+    public AsignacionTareas_Lider(String titulo, String categoria, String descripcion, String fechaInicio, String fechaFin, String prioridad, String estado, String programador) {
+        this.titulo = titulo;
+        this.categoria = categoria;
+        this.descripcion = descripcion;
+        this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
+        this.prioridad = prioridad;
+        this.estado = estado;
+        this.programador=programador;
+    }
+    public String getProgramador() {
+        return programador;
+    }
+    public void setProgramador(String programador) {
+        this.programador = programador;
+    }
+    public String getTitulo() {
+        return titulo;
+    }
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+    public String getCategoria() {
+        return categoria;
+    }
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
+    public String getDescripcion() {
+        return descripcion;
+    }
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+    public String getFechaInicio() {
+        return fechaInicio;
+    }
+    public void setFechaInicio(String fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
+    public String getFechaFin() {
+        return fechaFin;
+    }
+    public void setFechaFin(String fechaFin) {
+        this.fechaFin = fechaFin;
+    }
+    public String getPrioridad() {
+        return prioridad;
+    }
+    public void setPrioridad(String prioridad) {
+        this.prioridad = prioridad;
+    }
+    public String getEstado() {
+        return estado;
+    }
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+    public AsignacionTareas_Lider(MongoCollection<Document> collection){
+        this.collection=collection;
+        this.TareasID=(int) collection.countDocuments()+1;
+    }
     public AsignacionTareas_Lider() {
         VolverPanel_Lider.addActionListener(new ActionListener() {
             @Override
@@ -45,12 +117,53 @@ public class AsignacionTareas_Lider {
                 IngresoFecha_Fin.setText("");
                 IngresoPrioridad.setText("");
                 IngresoEstado.setText("");
+                IngresoProgramador.setText("");
             }
         });
         CrearTarea.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                titulo=IngresoTitulo.getText();
+                categoria=IngresoCategoria.getText();
+                descripcion=IngresoDescripcion.getText();
+                fechaInicio=IngresoFecha_Inicio.getText();
+                fechaFin=IngresoFecha_Fin.getText();
+                prioridad=IngresoPrioridad.getText();
+                estado=IngresoEstado.getText();
+                programador=IngresoProgramador.getText();
+                try (MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017")) {
+                    MongoDatabase database = mongoClient.getDatabase("BD_TaskFlow");
+                    MongoCollection<org.bson.Document> collection1 = database.getCollection("Miembros");
+                    //org.bson.Document document1 = collection1.find().first();
+                    //String dato1 = document1.getString("Nombre");
+                    boolean programadorEncontrado=false;
+                    String nombre=IngresoProgramador.getText();
+                    for (org.bson.Document document1 : collection1.find()) {
+                        String nombreMiembros = document1.getString("Nombre");
+                        if (nombreMiembros.equals(nombre)) {
+                            programadorEncontrado = true;
+                            break;
+                        }
+                    }
+                    if (programadorEncontrado){
+                        MongoCollection<org.bson.Document> collection = database.getCollection("Tareas");
+                        org.bson.Document documento = new org.bson.Document("TareaID", TareasID)
+                                .append("Titulo", titulo)
+                                .append("Categoria", categoria)
+                                .append("Descripcion", descripcion)
+                                .append("FechaInicio", fechaInicio)
+                                .append("FechaLimite", fechaFin)
+                                .append("Prioridad", prioridad)
+                                .append("Estado", estado)
+                                .append("Programador", programador);
+                        collection.insertOne(documento);
+                        TareasID++;
+                        System.out.println("Tarea agregada con éxito");
+                        JOptionPane.showMessageDialog(null, "Tarea asignada exitosamente");
+                    } else{
+                        JOptionPane.showMessageDialog(null, "El programador no existe en la BD");
+                    }
+                }
             }
         });
     }

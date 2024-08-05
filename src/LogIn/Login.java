@@ -38,7 +38,7 @@ public class Login {
                             MongoDatabase database = mongoClient.getDatabase("BD_TaskFlow");
                             String usuarioLider = IngresarUsuario.getText();
                             String claveLider = IngresoClave.getText();
-                            MongoCollection<Document> collection = database.getCollection("Lideres");
+                            MongoCollection<Document> collection = database.getCollection("CredencialesLideres");
                             Document query = new Document("Usuario", usuarioLider);
                             FindIterable<Document> documentos = collection.find(query);
                             System.out.println("Conexión exitosa");
@@ -63,7 +63,7 @@ public class Login {
                                 }
                             }
                         } catch (Exception e1) {
-                            e1.printStackTrace();
+                            //e1.printStackTrace();
                             JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos.");
                         }
                     } else if ("Miembro del equipo".equals(seleccionUsuario)) {
@@ -71,11 +71,11 @@ public class Login {
                             MongoDatabase database = mongoClient.getDatabase("BD_TaskFlow");
                             String usuarioMiembro = IngresarUsuario.getText();
                             String claveMiembro = IngresoClave.getText();
-                            MongoCollection<Document> collection = database.getCollection("Miembros");
+                            MongoCollection<Document> collection = database.getCollection("CredencialesMiembros");
                             Document query = new Document("Usuario", usuarioMiembro);
                             FindIterable<Document> documentos = collection.find(query);
                             System.out.println("Conexión exitosa");
-                            boolean ingreso = false;
+                            boolean ingreso2 = false;
                             // Iterar sobre los documentos encontrados
                             for (Document documento : documentos) {
                                 String usuarioMiembro_BD = documento.getString("Usuario");
@@ -89,13 +89,15 @@ public class Login {
                                     frame3.pack();
                                     frame3.setVisible(true);
                                     ((JFrame) SwingUtilities.getWindowAncestor(IngresoSistema)).dispose();
+                                    ingreso2=true;
+                                    break;
                                 } else {
                                     JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos");
                                 }
                             }
                         }
                         catch (Exception e2) {
-                            e2.printStackTrace();
+                            //e2.printStackTrace();
                             JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos");
                         }
                     } else {
