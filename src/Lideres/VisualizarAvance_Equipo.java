@@ -60,17 +60,25 @@ public class VisualizarAvance_Equipo {
                     MongoDatabase database = mongoClient.getDatabase("BD_TaskFlow");
                     //buscar en la BD si el miembro existe
                     MongoCollection<Document> collection1 = database.getCollection("Miembros");
-                    Document document1 = collection1.find().first(); // Aquí puedes usar un filtro si lo necesitas
-                    String dato1 = document1.getString("Nombre");
+                    //Document document1 = collection1.find().first(); // Aquí puedes usar un filtro si lo necesitas
+                    //String dato1 = document1.getString("Nombre");
+                    boolean miembro=false;
+                    String dato=IngresarDato.getText();
+                    for (Document document : collection1.find()) {
+                        String nombreMiembro = document.getString("Nombre");
+                        if (dato.equals(nombreMiembro)) {
+                            miembro = true;
+                            break;
+                        }
+                    }
                     //MongoCollection<Document> collection = database.getCollection("Tareas");
                     // Crear el filtro para buscar por el nombre ingresado
                     //Document filtro = new Document("Programador", IngresarDato.getText());
-                    String dato=IngresarDato.getText();
                     // Encontrar el primer documento que coincide con el filtro
                     //Document registro = collection.find(filtro).first();
-                    if (dato.equals(dato1)){
+                    if (miembro){
                         MongoCollection<Document> collection2 = database.getCollection("Tareas");
-                        Document filtro1 = new Document("Programador", IngresarDato.getText());
+                        Document filtro1 = new Document("Programador", dato);
                         Document registro = collection2.find(filtro1).first();
                         if (registro != null) {
                             // Obtener los valores de los campos específicos
@@ -78,6 +86,9 @@ public class VisualizarAvance_Equipo {
                             String descripcion = registro.getString("Descripcion");
                             String estado = registro.getString("Estado");
                             // Mostrar los valores en los campos correspondientes
+                            Nombre.setText("Título:");
+                            Tarea.setText("Tarea asignada:");
+                            Estado.setText("Estado:");
                             MostrarTitulo.setText(titulo);
                             MostrarTarea.setText(descripcion);
                             MostrarEstado.setText(estado);

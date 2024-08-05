@@ -33,7 +33,7 @@ public class AgregarTarea_Miembros {
     private JLabel Programador;
     //private MongoCollection<Document> collection;
     private MongoCollection<Document> collection;
-    private int TareasID=1;
+    private int TareasID;
     String titulo, categoria, descripcion, fechaInicio, fechaFin, prioridad, estado, programador;
     public AgregarTarea_Miembros(String titulo, String categoria, String descripcion, String fechaInicio, String fechaFin, String prioridad, String estado, String programador) {
         this.titulo = titulo;
@@ -96,7 +96,7 @@ public class AgregarTarea_Miembros {
     public AgregarTarea_Miembros(MongoCollection<Document> collection){
         this.collection=collection;
         Document maxTareaIDDoc = collection.find().sort(Sorts.descending("TareaID")).first();
-        if (maxTareaIDDoc != null) {
+        if (maxTareaIDDoc != null && maxTareaIDDoc.getInteger("TareaID") != null) {
             this.TareasID = maxTareaIDDoc.getInteger("TareaID") + 1;
         } else {
             this.TareasID = 1; // Iniciar en 1 si la colección está vacía

@@ -24,8 +24,7 @@ public class Login {
     private JLabel TituloLogin;
     private JLabel TipoUsuario;
     private JPasswordField IngresoClave;
-    private JLabel ImagenLogin;
-    private JLabel ErrorIngreso;
+
     public Login() {
         IngresoSistema.addActionListener(new ActionListener() {
             @Override

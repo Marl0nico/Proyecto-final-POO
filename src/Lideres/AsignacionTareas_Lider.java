@@ -1,4 +1,5 @@
 package Lideres;
+import com.mongodb.MongoWriteException;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
@@ -173,6 +174,13 @@ public class AsignacionTareas_Lider {
                         JOptionPane.showMessageDialog(null, "Tarea asignada exitosamente");
                     } else{
                         JOptionPane.showMessageDialog(null, "El programador no existe en la BD");
+                    }
+                } catch (MongoWriteException e2) {
+                    System.out.println("Error: " + e2.getMessage());
+                    if (e2.getError().getCategory().equals(com.mongodb.ErrorCategory.DUPLICATE_KEY)) {
+                        JOptionPane.showMessageDialog(null, "Error: TareaID duplicado. La tarea no fue asignada.");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Ocurrió un error al asignar la tarea.");
                     }
                 }
             }
