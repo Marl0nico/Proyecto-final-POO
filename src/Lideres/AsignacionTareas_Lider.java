@@ -3,8 +3,10 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.IndexOptions;
+import com.mongodb.client.model.Sorts;
+import org.bson.Document;
 import javax.swing.*;
-import javax.swing.text.Document;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 public class AsignacionTareas_Lider {
@@ -90,9 +92,19 @@ public class AsignacionTareas_Lider {
     public void setEstado(String estado) {
         this.estado = estado;
     }
-    public AsignacionTareas_Lider(MongoCollection<Document> collection){
+    /*public AsignacionTareas_Lider(MongoCollection<Document> collection){
         this.collection=collection;
         this.TareasID=(int) collection.countDocuments()+1;
+    }*/
+    public AsignacionTareas_Lider(MongoCollection<org.bson.Document> collection){
+        this.collection=collection;
+        org.bson.Document maxTareaIDDoc = collection.find().sort(Sorts.descending("TareaID")).first();
+        if (maxTareaIDDoc != null) {
+            this.TareasID = maxTareaIDDoc.getInteger("TareaID") + 1;
+        } else {
+            this.TareasID = 1; // Iniciar en 1 si la colección está vacía
+        }
+        //this.TareasID=(int) collection.countDocuments()+1;
     }
     public AsignacionTareas_Lider() {
         VolverPanel_Lider.addActionListener(new ActionListener() {
@@ -134,8 +146,7 @@ public class AsignacionTareas_Lider {
                 try (MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017")) {
                     MongoDatabase database = mongoClient.getDatabase("BD_TaskFlow");
                     MongoCollection<org.bson.Document> collection1 = database.getCollection("Miembros");
-                    //org.bson.Document document1 = collection1.find().first();
-                    //String dato1 = document1.getString("Nombre");
+                    //collection.createIndex(new Document("TareaID", 1), new IndexOptions().unique(true));
                     boolean programadorEncontrado=false;
                     String nombre=IngresoProgramador.getText();
                     for (org.bson.Document document1 : collection1.find()) {
