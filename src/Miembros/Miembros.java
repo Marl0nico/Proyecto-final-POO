@@ -10,6 +10,8 @@ public class Miembros {
     private JButton AsignarTarea;
     private JButton FinSesion;
     private JButton ActualizarTarea;
+    private JLabel ImagenMiembros;
+
     public Miembros() {
         FinSesion.addActionListener(new ActionListener() {
             @Override

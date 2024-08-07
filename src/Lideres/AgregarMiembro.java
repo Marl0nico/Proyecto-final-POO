@@ -33,6 +33,7 @@ public class AgregarMiembro {
     private JButton VaciarCampos;
     private JButton VolverPanel_Lider2;
     public JPanel PanelAgregar_Miembro;
+    private JLabel ImagenNuevo_Miembro;
     int cedula, nEquipo, telefono;
     String nombre, apellido, email, direccion, fechaNacimiento;
     public AgregarMiembro(int cedula, int nEquipo, int telefono, String nombre, String apellido, String email, String direccion, String fechaNacimiento) {
