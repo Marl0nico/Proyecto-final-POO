@@ -24,6 +24,9 @@ public class Login {
     private JLabel TituloLogin;
     private JLabel TipoUsuario;
     private JPasswordField IngresoClave;
+    private JLabel ImagenLogin;
+    private JLabel ImagenDS;
+    private JLabel ImagenLogo;
 
     public Login() {
         IngresoSistema.addActionListener(new ActionListener() {

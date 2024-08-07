@@ -13,6 +13,7 @@ public class Lider {
     private JButton FinSesion;
     private JLabel Lider;
     private JLabel ImagenAdministrador;
+
     public Lider() {
         FinSesion.addActionListener(new ActionListener() {
             @Override
