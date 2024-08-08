@@ -86,4 +86,5 @@ Adicional a todo esto, se ha agregado la respectiva documentación a través de 
 
 ![image](https://github.com/user-attachments/assets/6bfdfe5c-d683-4180-bfdf-3d28526302e5)
 
+Link del video: https://youtu.be/4Oj02mtFtYc
 
