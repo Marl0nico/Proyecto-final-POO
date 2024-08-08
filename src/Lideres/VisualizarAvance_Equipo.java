@@ -21,6 +21,11 @@ public class VisualizarAvance_Equipo {
     private JLabel MostrarTarea;
     private JLabel MostrarEstado;
     public JPanel PanelVer_Avance;
+    private JLabel FechaLimite;
+    private JLabel Prioridad;
+    private JLabel MostrarFecha_Limite;
+    private JLabel MostrarPrioridad;
+
     public VisualizarAvance_Equipo() {
         RegresarPanel_Lider.addActionListener(new ActionListener() {
             @Override
@@ -37,25 +42,6 @@ public class VisualizarAvance_Equipo {
         BuscarDato.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                /*try (MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017")) {
-                    MongoDatabase database = mongoClient.getDatabase("BD_TaskFlow");
-                    MongoCollection<Document> collection = database.getCollection("Tareas");
-                    Document nombre=null;
-                    nombre=new Document("Nombre", IngresarDato.getText());
-                    FindIterable<Document> documentos = collection.find();
-                    for (Document documento : documentos) {
-                        Document registro=collection.find(nombre).first();
-                        if (registro!=null){
-                            String titulo= documento.getString("Titulo");
-                            String descripcion = documento.getString("Descripcion");
-                            String estado= documento.getString("Estado");
-                            MostrarTitulo.setText(titulo);
-                            MostrarTarea.setText(descripcion);
-                            MostrarEstado.setText(estado);
-                        }
-                        //System.out.println(documento.toJson());
-                    }
-                }*/
                 try (MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017")) {
                     MongoDatabase database = mongoClient.getDatabase("BD_TaskFlow");
                     //buscar en la BD si el miembro existe
@@ -71,11 +57,6 @@ public class VisualizarAvance_Equipo {
                             break;
                         }
                     }
-                    //MongoCollection<Document> collection = database.getCollection("Tareas");
-                    // Crear el filtro para buscar por el nombre ingresado
-                    //Document filtro = new Document("Programador", IngresarDato.getText());
-                    // Encontrar el primer documento que coincide con el filtro
-                    //Document registro = collection.find(filtro).first();
                     if (miembro){
                         MongoCollection<Document> collection2 = database.getCollection("Tareas");
                         Document filtro1 = new Document("Programador", dato);
@@ -85,13 +66,19 @@ public class VisualizarAvance_Equipo {
                             String titulo = registro.getString("Titulo");
                             String descripcion = registro.getString("Descripcion");
                             String estado = registro.getString("Estado");
+                            String fechaLimite=registro.getString("FechaLimite");
+                            String prioridad=registro.getString("Prioridad");
                             // Mostrar los valores en los campos correspondientes
                             Nombre.setText("Título:");
                             Tarea.setText("Tarea asignada:");
                             Estado.setText("Estado:");
+                            FechaLimite.setText("Fecha Límite:");
+                            Prioridad.setText("Prioridad:");
                             MostrarTitulo.setText(titulo);
                             MostrarTarea.setText(descripcion);
                             MostrarEstado.setText(estado);
+                            MostrarFecha_Limite.setText(fechaLimite);
+                            MostrarPrioridad.setText(prioridad);
                         } else {
                             // Manejar el caso donde no se encuentra ningún documento
                             System.out.println("No se encontró ninguna tarea con el nombre proporcionado.");

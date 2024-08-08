@@ -27,7 +27,6 @@ public class Login {
     private JLabel ImagenLogin;
     private JLabel ImagenDS;
     private JLabel ImagenLogo;
-
     public Login() {
         IngresoSistema.addActionListener(new ActionListener() {
             @Override
